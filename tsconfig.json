@@ -10,5 +10,6 @@
 		"moduleResolution": "node",
 		"outDir": "dist/",
 		"allowJs": true
-	}
+	},
+	"include": ["src/**/*"],
 }
