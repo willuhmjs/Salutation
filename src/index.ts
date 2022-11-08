@@ -41,7 +41,9 @@ rest
 client.once("ready", async () => {
 	if (!mongo) throw Error("No mongo!");
 	if (!client.user) throw Error("Unexpected: client.user is null");
-	client.user.setActivity("users join servers!", { type: ActivityType.Watching });
+	client.user.setActivity("users join servers!", {
+		type: ActivityType.Watching,
+	});
 	console.log("Connected to Discord API!");
 	mongoose.connect(mongo, (error) => {
 		if (error) throw error;
