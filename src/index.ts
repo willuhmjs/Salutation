@@ -22,7 +22,13 @@ import type {
 if (!token) throw Error("No token!");
 if (!clientId) throw Error("No clientId!");
 
-const client: Client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildPresences] });
+const client: Client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildPresences,
+	],
+});
 
 (client as any).Schema = { Server };
 const commandList = new Collection<string, CommandLike>();

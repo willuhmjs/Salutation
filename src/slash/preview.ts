@@ -6,7 +6,12 @@ export default <CommandLike>{
 	data: new SlashCommandBuilder()
 		.setName("preview")
 		.setDescription("Preview your welcome image (if you have one).")
-		.addUserOption((option) => option.setName("user").setDescription("The user to preview the welcome image for.").setRequired(false)),
+		.addUserOption((option) =>
+			option
+				.setName("user")
+				.setDescription("The user to preview the welcome image for.")
+				.setRequired(false)
+		),
 	async execute(client, interaction) {
 		const { Server } = (client as any).Schema;
 
@@ -14,11 +19,23 @@ export default <CommandLike>{
 
 		if (server) {
 			await interaction.reply({
-				embeds: [new EmbedBuilder().setDescription("Loading example welcome message...").setColor("Blurple")]
+				embeds: [
+					new EmbedBuilder()
+						.setDescription("Loading example welcome message...")
+						.setColor("Blurple"),
+				],
 			});
-			let attachment = await createWelcome(interaction.options.getUser("user") ?? interaction.user, interaction.guild);
+			let attachment = await createWelcome(
+				interaction.options.getUser("user") ?? interaction.user,
+				interaction.guild
+			);
 			await interaction.editReply({
-				embeds: [new EmbedBuilder().setDescription("Preview of your welcome image:").setImage("attachment://welcome.jpg").setColor("Green")],
+				embeds: [
+					new EmbedBuilder()
+						.setDescription("Preview of your welcome image:")
+						.setImage("attachment://welcome.jpg")
+						.setColor("Green"),
+				],
 				files: [{ attachment, name: "welcome.jpg" }],
 			});
 		} else {

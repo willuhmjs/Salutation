@@ -1,13 +1,18 @@
-import {
-	Canvas,
-	loadImage,
-	loadFont,
-} from "canvas-constructor/skia";
+import { Canvas, loadImage, loadFont } from "canvas-constructor/skia";
 import { Guild, User } from "discord.js";
 import Server from "../server";
 import path from "node:path";
 
-const fonts = ["whitney.otf", "unisans.otf", "opensans.ttf", "opensansbold.ttf", "lobster.ttf", "roboto.ttf", "comicsans.ttf", "timesnewroman.ttf"];
+const fonts = [
+	"whitney.otf",
+	"unisans.otf",
+	"opensans.ttf",
+	"opensansbold.ttf",
+	"lobster.ttf",
+	"roboto.ttf",
+	"comicsans.ttf",
+	"timesnewroman.ttf",
+];
 for (const font of fonts) {
 	loadFont(font, path.join(__dirname, `../../fonts/${font}`));
 }
@@ -34,7 +39,11 @@ export default async (user: User, guild: Guild) => {
 		.setTextAlign("right");
 
 	if (welcome.showMemberCount) {
-		canvas = canvas.printText(`${guild.memberCount} member${guild.memberCount !== 1 ? "s" : ""}!`, 490, 180);
+		canvas = canvas.printText(
+			`${guild.memberCount} member${guild.memberCount !== 1 ? "s" : ""}!`,
+			490,
+			180
+		);
 	}
 
 	return canvas.jpeg();

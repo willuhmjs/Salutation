@@ -87,7 +87,11 @@ export default <CommandLike>{
 			interaction.options.getBoolean("show-member-count") ?? false;
 		const pingUser = interaction.options.getBoolean("ping-user") ?? false;
 		await interaction.reply({
-			embeds: [new EmbedBuilder().setDescription("Setting up the welcome message...").setColor("Blurple")]
+			embeds: [
+				new EmbedBuilder()
+					.setDescription("Setting up the welcome message...")
+					.setColor("Blurple"),
+			],
 		});
 		const server = await Server.findOne({ id: interaction.guildId });
 		if (!server) {
@@ -103,10 +107,19 @@ export default <CommandLike>{
 					pingUser,
 				},
 			}).save();
-			const attachment = await createWelcome(interaction.user, interaction.guild);
+			const attachment = await createWelcome(
+				interaction.user,
+				interaction.guild
+			);
 			await interaction.editReply({
-				embeds: [new EmbedBuilder().setTitle("Welcome setup successfully!").setDescription("Here's a preview of the welcome message:").setColor("Green").setImage("attachment://welcome.png")],
-				files: [{attachment, name: "welcome.jpg"}]
+				embeds: [
+					new EmbedBuilder()
+						.setTitle("Welcome setup successfully!")
+						.setDescription("Here's a preview of the welcome message:")
+						.setColor("Green")
+						.setImage("attachment://welcome.png"),
+				],
+				files: [{ attachment, name: "welcome.jpg" }],
 			});
 		} else {
 			server.welcome = {
@@ -119,10 +132,19 @@ export default <CommandLike>{
 				pingUser,
 			};
 			await server.save();
-			const attachment = await createWelcome(interaction.user, interaction.guild);
+			const attachment = await createWelcome(
+				interaction.user,
+				interaction.guild
+			);
 			await interaction.editReply({
-				embeds: [new EmbedBuilder().setTitle("Welcome edited successfully!").setDescription("Here's a preview of the welcome message:").setColor("Green").setImage("attachment://welcome.jpg")],
-				files: [{attachment, name: "welcome.jpg"}]
+				embeds: [
+					new EmbedBuilder()
+						.setTitle("Welcome edited successfully!")
+						.setDescription("Here's a preview of the welcome message:")
+						.setColor("Green")
+						.setImage("attachment://welcome.jpg"),
+				],
+				files: [{ attachment, name: "welcome.jpg" }],
 			});
 		}
 	},
