@@ -1,4 +1,5 @@
 import { commands } from "./slash";
+import createWelcome from "./lib/createWelcome";
 import {
 	Client,
 	Collection,
@@ -6,6 +7,7 @@ import {
 	Routes,
 	ActivityType,
 	RESTPostAPIChatInputApplicationCommandsJSONBody,
+	ChannelType,
 } from "discord.js";
 import { REST } from "@discordjs/rest";
 import mongoose from "mongoose";
@@ -19,7 +21,7 @@ import type {
 if (!token) throw Error("No token!");
 if (!clientId) throw Error("No clientId!");
 
-const client: Client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client: Client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildPresences] });
 
 (client as any).Schema = { Server };
 const commandList = new Collection<string, CommandLike>();
@@ -71,6 +73,18 @@ client.on("interactionCreate", async (interaction) => {
 			ephemeral: true,
 		});
 	}
+});
+
+client.on("guildMemberAdd", async (member) => {
+	if (!member.guild) return;
+	const [server]: any = await Server.find({ id: member.guild.id });
+	if (!server) return;
+	const channel = member.guild.channels.cache.get(server.welcome.channel);
+	if (channel?.type != ChannelType.GuildText) return;
+	const attachment = await createWelcome(member.user, member.guild);
+	await channel.send({
+		files: [{ attachment, name: "welcome.jpg" }],
+	});
 });
 
 client.login(token);
