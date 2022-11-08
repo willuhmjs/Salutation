@@ -12,16 +12,14 @@ export default <CommandLike>{
 		let [server] = await Server.find({ id: interaction.guild.id });
 
 		if (server) {
-			await interaction.deferReply();
+			await interaction.reply({
+				embeds: [new EmbedBuilder().setDescription("Loading example welcome message...").setColor("Blurple")]
+			});
 			let attachment = await createWelcome(interaction.user, interaction.guild);
-			const embed = new EmbedBuilder()
-				.setDescription("Preview of your welcome image:")
-				.setImage("attachment://welcome.jpg");
 			await interaction.editReply({
-				embeds: [embed],
+				embeds: [new EmbedBuilder().setDescription("Preview of your welcome image:").setImage("attachment://welcome.jpg").setColor("Green")],
 				files: [{ attachment, name: "welcome.jpg" }],
 			});
-			interaction.editReply({ embeds: [embed], files: [attachment] });
 		} else {
 			const errorEmbed = new EmbedBuilder()
 				.setDescription(
