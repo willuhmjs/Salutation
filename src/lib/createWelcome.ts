@@ -1,12 +1,16 @@
 import {
 	Canvas,
-	resolveImage,
-	loadFontsFromDirectory,
-} from "canvas-constructor/napi-rs";
+	loadImage,
+	registerFont,
+} from "canvas-constructor/skia";
 import { Guild, User } from "discord.js";
 import Server from "../server";
-
 import path from "node:path";
+
+const fonts = ["whitney.otf", "unisans.otf", "opensans.ttf", "opensansbold.ttf", "lobster.ttf", "roboto.ttf", "comicsans.ttf", "timesnewroman.ttf"];
+for (const font of fonts) {
+	registerFont(font, path.join(__dirname, `../../fonts/${font}`));
+}
 
 // Register font options
 /*
@@ -19,40 +23,29 @@ registerFont(fontPath('roboto.ttf'),  'roboto')
 registerFont(fontPath('opensans.ttf'),  "open sans");
 registerFont(fontPath('opensansbold.ttf'),  "open sans bold");*/
 
-loadFontsFromDirectory(path.resolve(__dirname, `./../../fonts/`));
-
 export default async (user: User, guild: Guild) => {
-	let [mongoGuild] = await Server.find({ id: guild.id });
-	if (!mongoGuild) throw Error("unexpected: guild not in database");
-	let avatarURL = user.displayAvatarURL({ extension: "png" });
-	let avatar = await resolveImage(avatarURL);
+	// TODO remove any type
+	let { welcome }: any = await Server.findOne({ id: guild.id });
+	if (!welcome) throw Error("unexpected: guild not in database");
+	let avatarURL = user.displayAvatarURL({ extension: "jpg" });
+	let avatar = await loadImage(avatarURL);
 	let canvas = new Canvas(500, 200);
 
-	if (!mongoGuild.image) {
-		//no img
-		canvas.setColor(mongoGuild.background);
-		canvas.printRectangle(0, 0, 500, 200);
-	} else if (mongoGuild.image) {
-		// its an image
-		let bg = await resolveImage(mongoGuild.background);
-		canvas.setColor("#000000");
-		canvas.printRectangle(0, 0, 500, 200);
-		canvas.printImage(bg, 0, 0, 500, 200);
-	}
-
 	canvas
-		.setColor(mongoGuild.font_color)
+		.setColor(welcome.backgroundColor)
+		.printRectangle(0, 0, 500, 200)
+		.setColor(welcome.fontColor)
 		.printCircle(95, 100, 75)
 		.printCircularImage(avatar, 95, 100, 70)
-		.setTextFont(`25px ${mongoGuild.font}`)
-		.printResponsiveText(`${mongoGuild.message},`, 195, 85, 279)
-		.setTextFont(`30px ${mongoGuild.font}`)
+		.setTextFont(`25px ${welcome.font}`)
+		.printResponsiveText(`${welcome.message}`, 195, 85, 279)
+		.setTextFont(`30px ${welcome.font}`)
 		.printResponsiveText(user.tag, 195, 125, 279)
-		.setTextFont(`21px ${mongoGuild.font}`)
+		.setTextFont(`21px ${welcome.font}`)
 		.setTextAlign("right");
 
-	if (mongoGuild.memberCount) {
-		canvas = canvas.printText(`Member #${guild.memberCount}`, 490, 180);
+	if (welcome.showMemberCount) {
+		canvas = canvas.printText(`${guild.memberCount} member${guild.memberCount !== 1 ? "s" : ""}!`, 490, 180);
 	}
 
 	return canvas.jpeg();
