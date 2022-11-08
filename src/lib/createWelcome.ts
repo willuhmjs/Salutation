@@ -1,7 +1,7 @@
 import {
 	Canvas,
 	loadImage,
-	registerFont,
+	loadFont,
 } from "canvas-constructor/skia";
 import { Guild, User } from "discord.js";
 import Server from "../server";
@@ -9,19 +9,8 @@ import path from "node:path";
 
 const fonts = ["whitney.otf", "unisans.otf", "opensans.ttf", "opensansbold.ttf", "lobster.ttf", "roboto.ttf", "comicsans.ttf", "timesnewroman.ttf"];
 for (const font of fonts) {
-	registerFont(font, path.join(__dirname, `../../fonts/${font}`));
+	loadFont(font, path.join(__dirname, `../../fonts/${font}`));
 }
-
-// Register font options
-/*
-registerFont(fontPath('whitney.otf'), 'whitney')
-registerFont(fontPath('unisans.otf'),  'uni sans')
-registerFont(fontPath('tnr.ttf'),  'times new roman')
-registerFont(fontPath('comicsans.ttf'),  'comic sans')
-registerFont(fontPath('lobster.ttf'),  'lobster')
-registerFont(fontPath('roboto.ttf'),  'roboto')
-registerFont(fontPath('opensans.ttf'),  "open sans");
-registerFont(fontPath('opensansbold.ttf'),  "open sans bold");*/
 
 export default async (user: User, guild: Guild) => {
 	// TODO remove any type
