@@ -8,6 +8,7 @@ import {
 	ActivityType,
 	RESTPostAPIChatInputApplicationCommandsJSONBody,
 	ChannelType,
+	Events,
 } from "discord.js";
 import { REST } from "@discordjs/rest";
 import mongoose from "mongoose";
@@ -75,7 +76,7 @@ client.on("interactionCreate", async (interaction) => {
 	}
 });
 
-client.on("guildMemberAdd", async (member) => {
+client.on(Events.GuildMemberAdd, async (member) => {
 	if (!member.guild) return;
 	const [server]: any = await Server.find({ id: member.guild.id });
 	if (!server) return;
