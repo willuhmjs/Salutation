@@ -4,8 +4,9 @@ Salutation is a highly customizable greetings bot to welcome new members to your
 
 ## Installation
 
-1. Edit the `config.ts` file in `src/config.ts`
-2. Build and run using:
+1. Download the latest release from the [releases page](https://github.com/willuhm-js/salutation/releases).
+2. Edit the `config.ts` file in `src/config.ts`.
+3. Build and run using:
 
 ```bash
 yarn
