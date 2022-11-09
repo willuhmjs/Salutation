@@ -10,8 +10,7 @@ Salutation is a highly customizable greetings bot to welcome new members to your
 
 ```bash
 yarn
-yarn build
-yarn start
+yarn dev
 ```
 
 ## Contributing
